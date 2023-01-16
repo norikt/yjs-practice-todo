@@ -4,7 +4,7 @@ import React, { FormEvent, useRef } from 'react'
 import { Todo } from '../hooks/useTodo'
 
 type Props = {
-  addTodo: (todo: Todo) => void
+  addTodo: (todo: string) => void
 }
 
 function AddTodo({ addTodo }: Props) {
@@ -31,10 +31,7 @@ function AddTodo({ addTodo }: Props) {
       return
     }
 
-    const todo: Todo = {
-      id: nanoid(),
-      body: contentRef.current.value
-    }
+    const todo = contentRef.current.value
 
     addTodo(todo)
     contentRef.current.value = ''
@@ -43,7 +40,7 @@ function AddTodo({ addTodo }: Props) {
   return (
     <form onSubmit={handleSubmit}>
       <HStack m='8'>
-        <Input variant='filled' placeholder='Input task' ref={contentRef} />
+        <Input variant='filled' placeholder='Input task' ref={contentRef} required/>
         <Button type='submit' colorScheme='green' px='8'>Add Todo</Button>
       </HStack>
     </form>

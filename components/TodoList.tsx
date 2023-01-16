@@ -1,11 +1,10 @@
 import { Badge, HStack, IconButton, Spacer, StackDivider, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { FaTrash } from 'react-icons/fa'
-import { Todo } from '../hooks/useTodo'
 
 type Props = {
-  todos: Todo[]
-  deleteTodo: (id: string) => void
+  todos: string[]
+  deleteTodo: (id: number) => void
 }
 
 function TodoList({ todos, deleteTodo }: Props) {
@@ -35,11 +34,11 @@ function TodoList({ todos, deleteTodo }: Props) {
 
   return (
     <VStack {...vStackProps}>
-      {todos.map(todo => (
-        <HStack key={todo.id}>
-          <Text>{todo.body}</Text>
+      {todos.map((todo, idx) => (
+        <HStack key={idx}>
+          <Text>{todo}</Text>
           <Spacer />
-          <IconButton onClick={() => deleteTodo(todo.id)} {...buttonProps} />
+          <IconButton onClick={() => deleteTodo(idx)} {...buttonProps} />
         </HStack>
       ))}
     </VStack>
