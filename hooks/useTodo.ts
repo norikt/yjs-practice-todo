@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
 // const initialTodos = [
 //   { id: '1', body: 'get bread' },
 //   { id: '2', body: 'get butter' },
 // ]
 
-export type Todo = { id: string, body: string }
+export type Todo = { id: string; body: string };
 
 function useTodo() {
   // const [todos, setTodos] = useState<Todo[]>(
@@ -13,21 +13,21 @@ function useTodo() {
   //   () => JSON.parse(localStorage.getItem('todos') || "[]")
   // )
 
-  const [todos, setTodos] = useState<Todo[]>([])
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos))
-  }, [todos])
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = (todo: Todo) => {
-    setTodos([...todos, todo])
-  }
+    setTodos([...todos, todo]);
+  };
 
   const deleteTodo = (id: string) => {
-    setTodos(todos.filter(todo => todo.id !== id))
-  }
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
 
-  return [todos, addTodo, deleteTodo] as const
+  return [todos, addTodo, deleteTodo] as const;
 }
 
-export default useTodo
+export default useTodo;
