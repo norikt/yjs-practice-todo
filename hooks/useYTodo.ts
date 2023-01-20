@@ -1,56 +1,38 @@
 import * as Y from "yjs";
-import { WebsocketProvider } from "y-websocket";
-import { useEffect, useState } from "react";
+import { useYjs } from "./useYjs";
 
-const yDoc = new Y.Doc();
-const yTodoArray = yDoc.getArray<string>("todo-demo:todo-list");
-
-function useYArrayValue<T extends unknown>(yArray: Y.Array<T>) {
-  const [value, setValue] = useState<T[]>(yArray.toArray());
-
-  useEffect(() => {
-    yArray.observe((_) => {
-      console.log("yArray.observe", _);
-      setValue(yArray.toArray());
-    });
-  }, [yArray]);
-
-  return value;
-}
+type Todo = {
+  id: string;
+  title: string;
+};
 
 export const useYTodo = () => {
-  const todos = useYArrayValue<string>(yTodoArray);
+  const { value, onUpdate } = useYjs<Y.Array<Todo>, Array<Todo>>({
+    key: "todo",
+    sharedType: { name: "todo-list", typeConstructor: Y.Array },
+    converter: (type: Y.Array<Todo>) => type.toArray(),
+  });
 
-  console.log(todos);
+  console.log(value);
 
-  useEffect(() => {
-    // Sync clients with the y-websocket provider
-    const wsProvider = new WebsocketProvider(
-      "ws://localhost:3001",
-      "todo-demo",
-      yDoc
-    );
-
-    wsProvider.on("status", (event: { status: any }) => {
-      console.log(event.status); // logs "connected" or "disconnected"
-    });
-
-    wsProvider.on("sync", (isSynced: boolean) => {
-      console.log(isSynced);
-    });
-  }, []);
-
-  const addTodo = (todo: string) => {
-    if (todos.includes(todo)) {
-      console.error(`This todo has beed stacked!`);
+  const addTodo = (todo: Todo) => {
+    if (value?.includes(todo)) {
+      console.error(`既に設定済みのタスクです`);
       return;
     }
-    yTodoArray.push([todo]);
+
+    onUpdate((ydoc, t) => {
+      const yarr = ydoc.getArray<Todo>("todo-list");
+      yarr.push([todo]);
+    });
   };
 
   const deleteTodo = (index: number) => {
-    yTodoArray.delete(index);
+    onUpdate((ydoc, t) => {
+      const yarr = ydoc.getArray<Todo>("todo-list");
+      yarr.delete(index);
+    });
   };
 
-  return { addTodo, deleteTodo, todos } as const;
+  return { addTodo, deleteTodo, todos: value || [] } as const;
 };
