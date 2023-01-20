@@ -1,10 +1,10 @@
 import { Button, HStack, Input, useToast } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
 import React, { FormEvent, useRef } from "react";
-import { Todo } from "../hooks/useTodo";
+import { Todo } from "../hooks/useYTodo";
 
 type Props = {
-  addTodo: (todo: string) => void;
+  addTodo: (todo: Todo) => void;
 };
 
 function AddTodo({ addTodo }: Props) {
@@ -31,9 +31,10 @@ function AddTodo({ addTodo }: Props) {
       return;
     }
 
-    const todo = contentRef.current.value;
-
-    addTodo(todo);
+    addTodo({
+      id: nanoid(),
+      body: contentRef.current.value,
+    });
     contentRef.current.value = "";
   };
 

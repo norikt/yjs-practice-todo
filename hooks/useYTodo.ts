@@ -1,9 +1,9 @@
 import * as Y from "yjs";
 import { useYjs } from "./useYjs";
 
-type Todo = {
+export type Todo = {
   id: string;
-  title: string;
+  body: string;
 };
 
 export const useYTodo = () => {
@@ -27,6 +27,22 @@ export const useYTodo = () => {
     });
   };
 
+  const editTodo = (todo: Todo) => {
+    if (value?.includes(todo)) {
+      console.error(`既に設定済みのタスクです`);
+      return;
+    }
+
+    onUpdate((ydoc, t) => {
+      const yarr = ydoc.getArray<Todo>("todo-list");
+      const arr = yarr.toArray();
+      const index = arr.findIndex((t) => t.id === todo.id);
+
+      yarr.delete(index, 1);
+      yarr.insert(index, [todo]);
+    });
+  };
+
   const deleteTodo = (index: number) => {
     onUpdate((ydoc, t) => {
       const yarr = ydoc.getArray<Todo>("todo-list");
@@ -34,5 +50,5 @@ export const useYTodo = () => {
     });
   };
 
-  return { addTodo, deleteTodo, todos: value || [] } as const;
+  return { addTodo, editTodo, deleteTodo, todos: value || [] } as const;
 };

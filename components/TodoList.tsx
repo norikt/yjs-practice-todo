@@ -2,6 +2,7 @@ import {
   Badge,
   HStack,
   IconButton,
+  Input,
   Spacer,
   StackDivider,
   Text,
@@ -9,13 +10,15 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { FaTrash } from "react-icons/fa";
+import { Todo } from "../hooks/useYTodo";
 
 type Props = {
-  todos: string[];
+  todos: Todo[];
+  editTodo: (todo: Todo) => void;
   deleteTodo: (id: number) => void;
 };
 
-function TodoList({ todos, deleteTodo }: Props) {
+function TodoList({ todos, editTodo, deleteTodo }: Props) {
   if (todos.length === 0)
     return (
       <Badge colorScheme="green" p="4" m="4" borderRadius="lg">
@@ -44,7 +47,15 @@ function TodoList({ todos, deleteTodo }: Props) {
     <VStack {...vStackProps}>
       {todos.map((todo, idx) => (
         <HStack key={idx}>
-          <Text>{todo}</Text>
+          <Input
+            value={todo.body}
+            onChange={(e) => {
+              editTodo({
+                ...todo,
+                body: e.target.value,
+              });
+            }}
+          />
           <Spacer />
           <IconButton onClick={() => deleteTodo(idx)} {...buttonProps} />
         </HStack>

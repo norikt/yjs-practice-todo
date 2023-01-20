@@ -6,13 +6,13 @@ import useTodo from "../hooks/useTodo";
 import { useYTodo } from "../hooks/useYTodo";
 
 const Home: NextPage = () => {
-  const { todos, addTodo, deleteTodo } = useYTodo();
+  const { todos, addTodo, editTodo, deleteTodo } = useYTodo();
 
   return (
     <VStack p={4}>
       <Heading size="2xl">Todo Sample</Heading>
       <AddTodo addTodo={addTodo} />
-      <TodoList todos={todos} deleteTodo={deleteTodo} />
+      <TodoList todos={todos} editTodo={editTodo} deleteTodo={deleteTodo} />
     </VStack>
   );
 };
