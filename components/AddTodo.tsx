@@ -42,12 +42,12 @@ function AddTodo({ addTodo }: Props) {
       <HStack m="8">
         <Input
           variant="filled"
-          placeholder="Input task"
+          placeholder="タスクを入力"
           ref={contentRef}
           required
         />
         <Button type="submit" colorScheme="green" px="8">
-          Add Todo
+          タスクを追加
         </Button>
       </HStack>
     </form>

@@ -19,7 +19,7 @@ function TodoList({ todos, deleteTodo }: Props) {
   if (todos.length === 0)
     return (
       <Badge colorScheme="green" p="4" m="4" borderRadius="lg">
-        No Todos, yay!!!
+        タスクはありません!!
       </Badge>
     );
 
