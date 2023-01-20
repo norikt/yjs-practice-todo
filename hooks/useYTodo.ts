@@ -5,26 +5,6 @@ import { useEffect, useState } from "react";
 const yDoc = new Y.Doc();
 const yTodoArray = yDoc.getArray<string>("todo-demo:todo-list");
 
-yDoc.on("update", (updateMessage: any, origin, yDoc) => {
-  console.log("yDoc.update", updateMessage, origin, yDoc);
-});
-
-yDoc.on("beforeTransaction", (transaction: any, doc: any) => {
-  console.log("yDoc.beforeTransaction", transaction, doc);
-});
-
-yDoc.on("afterTransaction", (transaction: any, doc: any) => {
-  console.log("yDoc.afterTransaction", transaction, doc);
-});
-
-yDoc.on("beforeAllTransactions", (transaction: any, doc: any) => {
-  console.log("yDoc.beforeAllTransactions", transaction, doc);
-});
-
-yDoc.on("afterAllTransactions", (transaction: any, doc: any) => {
-  console.log("yDoc.afterAllTransactions", transaction, doc);
-});
-
 function useYArrayValue<T extends unknown>(yArray: Y.Array<T>) {
   const [value, setValue] = useState<T[]>(yArray.toArray());
 

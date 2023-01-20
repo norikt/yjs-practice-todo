@@ -19,8 +19,10 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
+    "y-indexeddb": "^9.0.9",
     "y-websocket": "^1.4.5",
-    "yjs": "^13.5.44"
+    "yjs": "^13.5.44",
+    "zustand": "^4.3.2"
   },
   "devDependencies": {
     "@types/node": "18.11.18",
