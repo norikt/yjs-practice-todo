@@ -45,7 +45,6 @@ export const useYjs = <T extends Y.AbstractType<any>, U>(
       events.forEach((event) => {
         if (event.target === type) {
           const value: U = converter(event.target);
-          // event.target.delete(0, event.target.length);
           console.log("observed setValue", value);
           setValue(value);
         }

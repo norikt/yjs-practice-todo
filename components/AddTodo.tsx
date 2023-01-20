@@ -1,17 +1,15 @@
 import { Button, HStack, Input, useToast } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
 import React, { FormEvent, useRef } from "react";
-import { Todo } from "../hooks/useYTodo";
+import { Todo, useYTodo } from "../hooks/useYTodo";
 
-type Props = {
-  addTodo: (todo: Todo) => void;
-};
-
-function AddTodo({ addTodo }: Props) {
+function AddTodo() {
   const contentRef = useRef<HTMLInputElement>(null);
 
   // https://chakra-ui.com/docs/feedback/toast
   const toast = useToast();
+
+  const { addTodo } = useYTodo();
 
   const toastError = (title: string) =>
     toast({

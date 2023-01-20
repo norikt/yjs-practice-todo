@@ -6,49 +6,43 @@ export type Todo = {
   body: string;
 };
 
+// type SubDocMap = { [id: string]: Y.Doc };
+export type TodoMap = { [id: string]: Todo };
+
+const MAP_KEY = "todo-map";
 export const useYTodo = () => {
-  const { value, onUpdate } = useYjs<Y.Array<Todo>, Array<Todo>>({
+  const { value, onUpdate } = useYjs<Y.Map<Todo>, TodoMap>({
     key: "todo",
-    sharedType: { name: "todo-list", typeConstructor: Y.Array },
-    converter: (type: Y.Array<Todo>) => type.toArray(),
+    sharedType: { name: MAP_KEY, typeConstructor: Y.Map },
+    converter: (type) => type.toJSON(),
   });
 
-  console.log(value);
-
   const addTodo = (todo: Todo) => {
-    if (value?.includes(todo)) {
+    if (value && value[todo.id]) {
       console.error(`既に設定済みのタスクです`);
       return;
     }
 
     onUpdate((ydoc, t) => {
-      const yarr = ydoc.getArray<Todo>("todo-list");
-      yarr.push([todo]);
+      const ymap = ydoc.getMap<Todo>(MAP_KEY);
+      ymap.set(todo.id, todo);
     });
   };
 
   const editTodo = (todo: Todo) => {
-    if (value?.includes(todo)) {
-      console.error(`既に設定済みのタスクです`);
-      return;
-    }
-
     onUpdate((ydoc, t) => {
-      const yarr = ydoc.getArray<Todo>("todo-list");
-      const arr = yarr.toArray();
-      const index = arr.findIndex((t) => t.id === todo.id);
-
-      yarr.delete(index, 1);
-      yarr.insert(index, [todo]);
+      const ymap = ydoc.getMap<Todo>(MAP_KEY);
+      const map = ymap.toJSON();
+      ymap.set(todo.id, { ...map[todo.id], ...todo });
     });
   };
 
-  const deleteTodo = (index: number) => {
+  const deleteTodo = (id: string) => {
     onUpdate((ydoc, t) => {
-      const yarr = ydoc.getArray<Todo>("todo-list");
-      yarr.delete(index);
+      const ymap = ydoc.getMap<Todo>(MAP_KEY);
+      ymap.delete(id);
     });
   };
 
-  return { addTodo, editTodo, deleteTodo, todos: value || [] } as const;
+  return { addTodo, editTodo, deleteTodo, todoMap: value || {} } as const;
 };
